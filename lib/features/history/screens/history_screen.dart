@@ -243,67 +243,64 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   }
 
   Widget _buildHistoryItem(HistoryItem item) {
-    return Hero(
-      tag: 'history_${item.id}',
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: ExpansionTile(
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              item.toolIcon,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: ExpansionTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            shape: BoxShape.circle,
           ),
-          title: Text(
-            item.toolName,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          child: Icon(
+            item.toolIcon,
+            color: Theme.of(context).colorScheme.primary,
           ),
-          subtitle: Text(_formatDate(item.timestamp)),
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildInfoRow('Input:', item.inputFile),
-                  const SizedBox(height: 4),
-                  _buildInfoRow('Output:', item.outputFile),
-                  const SizedBox(height: 4),
-                  _buildInfoRow('Input Size:', _formatFileSize(item.inputSize)),
-                  const SizedBox(height: 4),
-                  _buildInfoRow('Output Size:', _formatFileSize(item.outputSize)),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => _openFileLocation(item.outputFile),
-                          icon: const Icon(Icons.folder_open, size: 18),
-                          label: const Text('Open Location'),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () => _shareFile(item.outputFile),
-                          icon: const Icon(Icons.share, size: 18),
-                          label: const Text('Share'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
+        title: Text(
+          item.toolName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(_formatDate(item.timestamp)),
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildInfoRow('Input:', item.inputFile),
+                const SizedBox(height: 4),
+                _buildInfoRow('Output:', item.outputFile),
+                const SizedBox(height: 4),
+                _buildInfoRow('Input Size:', _formatFileSize(item.inputSize)),
+                const SizedBox(height: 4),
+                _buildInfoRow('Output Size:', _formatFileSize(item.outputSize)),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => _openFileLocation(item.outputFile),
+                        icon: const Icon(Icons.folder_open, size: 18),
+                        label: const Text('Open Location'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => _shareFile(item.outputFile),
+                        icon: const Icon(Icons.share, size: 18),
+                        label: const Text('Share'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

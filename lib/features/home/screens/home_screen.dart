@@ -6,6 +6,109 @@ import '../../tools/image_compressor/image_compressor_screen.dart';
 import '../../tools/image_converter/image_converter_screen.dart';
 import '../../tools/images_to_pdf/images_to_pdf_screen.dart';
 
+class ResponsiveSizes {
+  final double iconSize;
+  final double titleSize;
+  final double descSize;
+  final double cardPadding;
+  final double iconPadding;
+  final double spacing;
+  final int crossAxisCount;
+  final double childAspectRatio;
+
+  ResponsiveSizes({
+    required this.iconSize,
+    required this.titleSize,
+    required this.descSize,
+    required this.cardPadding,
+    required this.iconPadding,
+    required this.spacing,
+    required this.crossAxisCount,
+    required this.childAspectRatio,
+  });
+
+  factory ResponsiveSizes.fromWidth(double width) {
+    // Small mobile phones
+    if (width < 360) {
+      return ResponsiveSizes(
+        iconSize: 22,
+        titleSize: 11,
+        descSize: 9,
+        cardPadding: 8,
+        iconPadding: 8,
+        spacing: 4,
+        crossAxisCount: 2,
+        childAspectRatio: 0.85,
+      );
+    }
+    // Standard mobile phones
+    else if (width < 480) {
+      return ResponsiveSizes(
+        iconSize: 24,
+        titleSize: 12,
+        descSize: 10,
+        cardPadding: 10,
+        iconPadding: 10,
+        spacing: 6,
+        crossAxisCount: 2,
+        childAspectRatio: 0.9,
+      );
+    }
+    // Large phones / Small tablets
+    else if (width < 600) {
+      return ResponsiveSizes(
+        iconSize: 26,
+        titleSize: 13,
+        descSize: 11,
+        cardPadding: 12,
+        iconPadding: 10,
+        spacing: 8,
+        crossAxisCount: 3,
+        childAspectRatio: 0.95,
+      );
+    }
+    // Tablets
+    else if (width < 900) {
+      return ResponsiveSizes(
+        iconSize: 28,
+        titleSize: 14,
+        descSize: 12,
+        cardPadding: 14,
+        iconPadding: 12,
+        spacing: 10,
+        crossAxisCount: 4,
+        childAspectRatio: 1.0,
+      );
+    }
+    // Small desktop / Large tablets
+    else if (width < 1200) {
+      return ResponsiveSizes(
+        iconSize: 30,
+        titleSize: 15,
+        descSize: 12,
+        cardPadding: 16,
+        iconPadding: 12,
+        spacing: 12,
+        crossAxisCount: 5,
+        childAspectRatio: 1.05,
+      );
+    }
+    // Desktop
+    else {
+      return ResponsiveSizes(
+        iconSize: 32,
+        titleSize: 16,
+        descSize: 13,
+        cardPadding: 18,
+        iconPadding: 14,
+        spacing: 14,
+        crossAxisCount: 6,
+        childAspectRatio: 1.1,
+      );
+    }
+  }
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -35,26 +138,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    
-    int crossAxisCount;
-    double childAspectRatio;
-    
-    if (screenWidth < 400) {
-      crossAxisCount = 2;
-      childAspectRatio = 1.1;
-    } else if (screenWidth < 600) {
-      crossAxisCount = 3;
-      childAspectRatio = 1.15;
-    } else if (screenWidth < 900) {
-      crossAxisCount = 4;
-      childAspectRatio = 1.2;
-    } else if (screenWidth < 1400) {
-      crossAxisCount = 5;
-      childAspectRatio = 1.2;
-    } else {
-      crossAxisCount = 6;
-      childAspectRatio = 1.2;
-    }
+    final sizes = ResponsiveSizes.fromWidth(screenWidth);
 
     return Scaffold(
       appBar: AppBar(
@@ -65,39 +149,39 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(sizes.spacing),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildAnimatedCategorySection('Image Tools', 'Image', crossAxisCount, childAspectRatio, 0),
-            const SizedBox(height: 20),
-            _buildAnimatedCategorySection('PDF Tools', 'PDF', crossAxisCount, childAspectRatio, 1),
-            const SizedBox(height: 20),
-            _buildAnimatedCategorySection('Video Tools', 'Video', crossAxisCount, childAspectRatio, 2),
-            const SizedBox(height: 20),
-            _buildAnimatedCategorySection('Audio Tools', 'Audio', crossAxisCount, childAspectRatio, 3),
+            _buildAnimatedCategorySection('Image Tools', 'Image', sizes, 0),
+            SizedBox(height: sizes.spacing * 1.5),
+            _buildAnimatedCategorySection('PDF Tools', 'PDF', sizes, 1),
+            SizedBox(height: sizes.spacing * 1.5),
+            _buildAnimatedCategorySection('Video Tools', 'Video', sizes, 2),
+            SizedBox(height: sizes.spacing * 1.5),
+            _buildAnimatedCategorySection('Audio Tools', 'Audio', sizes, 3),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAnimatedCategorySection(String title, String category, int crossAxisCount, double childAspectRatio, int sectionIndex) {
+  Widget _buildAnimatedCategorySection(String title, String category, ResponsiveSizes sizes, int sectionIndex) {
     final tools = allTools.where((tool) => tool.category == category).toList();
-    final delay = sectionIndex * 0.15;
+    final delay = sectionIndex * 0.1;
     
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
         final slideAnimation = Tween<Offset>(
-          begin: const Offset(0, 0.3),
+          begin: const Offset(0, 0.2),
           end: Offset.zero,
         ).animate(
           CurvedAnimation(
             parent: _animationController,
             curve: Interval(
               delay,
-              delay + 0.5,
+              delay + 0.4,
               curve: Curves.easeOutCubic,
             ),
           ),
@@ -111,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             parent: _animationController,
             curve: Interval(
               delay,
-              delay + 0.4,
+              delay + 0.3,
               curve: Curves.easeOut,
             ),
           ),
@@ -121,40 +205,54 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           position: slideAnimation,
           child: FadeTransition(
             opacity: fadeAnimation,
-            child: _buildCategorySection(title, tools, crossAxisCount, childAspectRatio, sectionIndex),
+            child: _buildCategorySection(title, tools, sizes),
           ),
         );
       },
     );
   }
 
-  Widget _buildCategorySection(String title, List<ToolModel> tools, int crossAxisCount, double childAspectRatio, int sectionIndex) {
+  Widget _buildCategorySection(String title, List<ToolModel> tools, ResponsiveSizes sizes) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 4,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: sizes.titleSize + 2,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: sizes.spacing),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            childAspectRatio: childAspectRatio,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+            crossAxisCount: sizes.crossAxisCount,
+            childAspectRatio: sizes.childAspectRatio,
+            crossAxisSpacing: sizes.spacing.toDouble(),
+            mainAxisSpacing: sizes.spacing.toDouble(),
           ),
           itemCount: tools.length,
           itemBuilder: (context, index) {
             return ToolCard(
               tool: tools[index],
               animationController: _animationController,
-              index: index + (sectionIndex * 10),
+              index: index,
+              sizes: sizes,
             );
           },
         ),
@@ -167,12 +265,14 @@ class ToolCard extends StatefulWidget {
   final ToolModel tool;
   final AnimationController animationController;
   final int index;
+  final ResponsiveSizes sizes;
 
   const ToolCard({
     super.key,
     required this.tool,
     required this.animationController,
     required this.index,
+    required this.sizes,
   });
 
   @override
@@ -184,20 +284,23 @@ class _ToolCardState extends State<ToolCard> {
 
   @override
   Widget build(BuildContext context) {
-    final delay = 0.1 + (widget.index * 0.03);
+    final delay = widget.index * 0.05;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final sizes = widget.sizes;
     
     return AnimatedBuilder(
       animation: widget.animationController,
       builder: (context, child) {
         final scaleAnimation = Tween<double>(
-          begin: 0.8,
+          begin: 0.9,
           end: 1.0,
         ).animate(
           CurvedAnimation(
             parent: widget.animationController,
             curve: Interval(
               delay,
-              delay + 0.3,
+              delay + 0.2,
               curve: Curves.easeOutCubic,
             ),
           ),
@@ -211,66 +314,68 @@ class _ToolCardState extends State<ToolCard> {
           ),
         );
       },
-      child: Card(
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.1),
-        shape: RoundedRectangleBorder(
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDark ? AppTheme.surfaceVariantDark : const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDark ? Colors.transparent : const Color(0xFFE2E8F0),
+            width: 1,
+          ),
         ),
-        child: InkWell(
-          onTapDown: (_) => setState(() => _isPressed = true),
-          onTapUp: (_) => setState(() => _isPressed = false),
-          onTapCancel: () => setState(() => _isPressed = false),
-          onTap: () {
-            setState(() => _isPressed = false);
-            _navigateToTool(widget.tool);
-          },
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryLight.withOpacity(0.1),
-                    shape: BoxShape.circle,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTapDown: (_) => setState(() => _isPressed = true),
+            onTapUp: (_) => setState(() => _isPressed = false),
+            onTapCancel: () => setState(() => _isPressed = false),
+            onTap: () {
+              setState(() => _isPressed = false);
+              _navigateToTool(widget.tool);
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: EdgeInsets.all(sizes.cardPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(sizes.iconPadding),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      widget.tool.icon,
+                      color: colorScheme.primary,
+                      size: sizes.iconSize,
+                    ),
                   ),
-                  child: Icon(
-                    widget.tool.icon,
-                    color: AppTheme.primaryLight,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Flexible(
-                  child: Text(
+                  SizedBox(height: sizes.spacing),
+                  Text(
                     widget.tool.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 11,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: sizes.titleSize,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(height: 1),
-                Flexible(
-                  child: Text(
+                  SizedBox(height: sizes.spacing * 0.5),
+                  Text(
                     widget.tool.description,
                     style: TextStyle(
-                      fontSize: 9,
-                      color: Colors.grey[600],
+                      fontSize: sizes.descSize,
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -297,7 +402,10 @@ class _ToolCardState extends State<ToolCard> {
       default:
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${tool.name} coming soon!')),
+            SnackBar(
+              content: Text('${tool.name} coming soon!'),
+              behavior: SnackBarBehavior.floating,
+            ),
           );
         }
         return;

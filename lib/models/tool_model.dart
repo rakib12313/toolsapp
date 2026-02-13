@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_theme.dart';
 
 class ToolModel {
   final String id;
@@ -7,7 +6,7 @@ class ToolModel {
   final String description;
   final IconData icon;
   final String category;
-  final Color iconBackgroundColor;
+  final Color? iconBackgroundColor;
 
   ToolModel({
     required this.id,
@@ -15,7 +14,7 @@ class ToolModel {
     required this.description,
     required this.icon,
     required this.category,
-    this.iconBackgroundColor = AppTheme.primaryBlue,
+    this.iconBackgroundColor,
   });
 }
 
