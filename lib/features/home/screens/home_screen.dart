@@ -41,19 +41,19 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     
     if (screenWidth < 400) {
       crossAxisCount = 2;
-      childAspectRatio = 0.85;
+      childAspectRatio = 1.1;
     } else if (screenWidth < 600) {
-      crossAxisCount = 2;
-      childAspectRatio = 0.9;
-    } else if (screenWidth < 900) {
       crossAxisCount = 3;
-      childAspectRatio = 0.95;
-    } else if (screenWidth < 1400) {
+      childAspectRatio = 1.15;
+    } else if (screenWidth < 900) {
       crossAxisCount = 4;
-      childAspectRatio = 1.0;
-    } else {
+      childAspectRatio = 1.2;
+    } else if (screenWidth < 1400) {
       crossAxisCount = 5;
-      childAspectRatio = 1.0;
+      childAspectRatio = 1.2;
+    } else {
+      crossAxisCount = 6;
+      childAspectRatio = 1.2;
     }
 
     return Scaffold(
@@ -146,8 +146,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
             childAspectRatio: childAspectRatio,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
           ),
           itemCount: tools.length,
           itemBuilder: (context, index) {
@@ -227,46 +227,46 @@ class _ToolCardState extends State<ToolCard> {
           },
           borderRadius: BorderRadius.circular(12),
           child: Container(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryBlue.withOpacity(0.1),
+                    color: AppTheme.primaryLight.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     widget.tool.icon,
-                    color: AppTheme.primaryBlue,
-                    size: 24,
+                    color: AppTheme.primaryLight,
+                    size: 22,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Flexible(
                   child: Text(
                     widget.tool.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                      fontSize: 11,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 1),
                 Flexible(
                   child: Text(
                     widget.tool.description,
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 9,
                       color: Colors.grey[600],
                     ),
                     textAlign: TextAlign.center,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
